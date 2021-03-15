@@ -50,4 +50,22 @@ def products(request, pk=None):
     return render(request, 'mainapp/products.html', content)
 
 
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    else:
+        return []
+
+
+def product(request, pk):
+    title = 'продукты'
+
+    content = {
+        'title': title,
+        'links_menu': ProductCategory.objects.all(),
+        'product': get_object_or_404(Product, pk=pk),
+        'basket': get_basket(request.user),
+    }
+
+    return render(request, 'mainapp/product.html', content)
 
